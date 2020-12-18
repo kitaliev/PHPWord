@@ -299,6 +299,27 @@ class TemplateProcessor
         $this->replaceXmlBlock($search, $xmlWriter->getData(), 'w:p');
     }
 
+
+    /**
+     * FUCK THIS SHIT
+     * add arrayof e.g. new ListItem()
+     * @param string $search
+     * @param $array
+     */
+    public function setThisFuckingArrayFuckingFuck($search, $array)
+    {
+        $xmlWriter = new XMLWriter();
+        foreach ($array as $complexType) {
+          $elementName = substr(get_class($complexType), strrpos(get_class($complexType), '\\') + 1);
+          $objectClass = 'PhpOffice\\PhpWord\\Writer\\Word2007\\Element\\' . $elementName;
+
+          /** @var \PhpOffice\PhpWord\Writer\Word2007\Element\AbstractElement $elementWriter */
+          $elementWriter = new $objectClass($xmlWriter, $complexType, false);
+          $elementWriter->write();
+        }
+        $this->replaceXmlBlock($search, $xmlWriter->getData(), 'w:p');
+    }
+
     /**
      * @param mixed $search
      * @param mixed $replace
