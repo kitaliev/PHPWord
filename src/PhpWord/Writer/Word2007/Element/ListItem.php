@@ -29,39 +29,49 @@ class ListItem extends AbstractElement
     /**
      * Write list item element.
      */
-    public function write()
-    {
-        $xmlWriter = $this->getXmlWriter();
-        $element = $this->getElement();
-        if (!$element instanceof \PhpOffice\PhpWord\Element\ListItem) {
-            return;
-        }
-
-        $textObject = $element->getTextObject();
-
-        $styleWriter = new ParagraphStyleWriter($xmlWriter, $textObject->getParagraphStyle());
-        $styleWriter->setWithoutPPR(true);
-        $styleWriter->setIsInline(true);
-
-        $xmlWriter->startElement('w:p');
-
-        $xmlWriter->startElement('w:pPr');
-        $styleWriter->write();
-
-        $xmlWriter->startElement('w:numPr');
-        $xmlWriter->startElement('w:ilvl');
-        $xmlWriter->writeAttribute('w:val', $element->getDepth());
-        $xmlWriter->endElement(); // w:ilvl
-        $xmlWriter->startElement('w:numId');
-        $xmlWriter->writeAttribute('w:val', $element->getStyle()->getNumId());
-        $xmlWriter->endElement(); // w:numId
-        $xmlWriter->endElement(); // w:numPr
-
-        $xmlWriter->endElement(); // w:pPr
-
-        $elementWriter = new Text($xmlWriter, $textObject, true);
-        $elementWriter->write();
-
-        $xmlWriter->endElement(); // w:p
+  public function write()
+  {
+    $xmlWriter = $this->getXmlWriter();
+    $element = $this->getElement();
+    if (!$element instanceof \PhpOffice\PhpWord\Element\ListItem) {
+      return;
     }
+
+    $textObject = $element->getTextObject();
+
+    $styleWriter = new ParagraphStyleWriter($xmlWriter,
+      $textObject->getParagraphStyle());
+    $styleWriter->setWithoutPPR(true);
+    $styleWriter->setIsInline(true);
+
+    $xmlWriter->startElement('w:p');
+
+    $xmlWriter->startElement('w:pPr');
+    $styleWriter->write();
+
+    $xmlWriter->startElement('w:numPr');
+    $xmlWriter->startElement('w:ilvl');
+    $xmlWriter->writeAttribute('w:val', $element->getDepth());
+    $xmlWriter->endElement(); // w:ilvl
+    $xmlWriter->startElement('w:numId');
+//    $xmlWriter->writeAttribute('w:val', $element->getStyle()->getNumId());
+    $xmlWriter->writeAttribute('w:val', session()->get('id'));
+    $xmlWriter->endElement(); // w:numId
+    $xmlWriter->endElement(); // w:numPr
+
+
+    //Отступ слева
+    $xmlWriter->startElement('w:ind');
+    $xmlWriter->writeAttribute('w:hanging', 294);
+    $xmlWriter->endElement(); // w:ind
+    //Конец отступ слева
+
+
+    $xmlWriter->endElement(); // w:pPr
+
+    $elementWriter = new Text($xmlWriter, $textObject, true);
+    $elementWriter->write();
+
+    $xmlWriter->endElement(); // w:p
+  }
 }
