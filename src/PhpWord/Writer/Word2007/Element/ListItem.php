@@ -33,7 +33,7 @@ class ListItem extends AbstractElement
   {
     $xmlWriter = $this->getXmlWriter();
     $element = $this->getElement();
-    if (!$element instanceof \PhpOffice\PhpWord\Element\ListItem) {
+    if ( ! $element instanceof \PhpOffice\PhpWord\Element\ListItem) {
       return;
     }
 
